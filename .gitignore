@@ -1,5 +1,5 @@
-Crypto
 *.py[cod]
+README.rst
 
 # C extensions
 *.so

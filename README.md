@@ -9,6 +9,7 @@ blog platform on cryptedblog.com which is based on sjcl.
 
 Typical usage may look like this:
 
+```python
     #!/usr/bin/env python
 
     from sjcl import SJCL
@@ -17,11 +18,12 @@ Typical usage may look like this:
 
     print cyphertext
     print SJCL().decrypt(cyphertext, "shared_secret")
+```
 
 Public repository
----------------------
+-----------------
 
-https://github.com/elastic/sjcl
+https://github.com/berlincode/sjcl
 
 
 License
