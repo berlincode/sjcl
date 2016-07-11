@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from sjcl import SJCL
+from .sjcl import SJCL
 
 __author__ = "Ulf Bartel <elastic.code@gmail.com>"
 __version__ = "0.1.4"
