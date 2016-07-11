@@ -54,7 +54,7 @@ import base64
 
 def truncate_iv(iv, ol, tlen):  # ol and tlen in bits
     ivl = len(iv)  # iv length in bytes
-    ol = (ol - tlen) / 8
+    ol = (ol - tlen) // 8
 
     # "compute the length of the length" (see ccm.js)
     L = 2

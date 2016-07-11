@@ -11,7 +11,7 @@ class Test(unittest.TestCase):
         pass
 
     def test_encrypt_decrypt(self):
-        message = "secret message to encrypt"
+        message = b"secret message to encrypt"
         cyphertext = SJCL().encrypt(message, "shared_secret")
         self.assertEqual(
             SJCL().decrypt(cyphertext, "shared_secret"),
@@ -33,7 +33,7 @@ class Test(unittest.TestCase):
         }
         self.assertEqual(
             SJCL().decrypt(cyphertext, "shared_secret"),
-            "secret message to encrypt"
+            b"secret message to encrypt"
         )
 
 if __name__ == '__main__':
