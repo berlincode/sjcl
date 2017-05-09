@@ -37,7 +37,7 @@ blog platform on cryptedblog.com which is based on sjcl.
     ],
     package_dir={'sjcl': 'sjcl'},
     include_package_data=True,
-    install_requires=['pycrypto'], # TODO add version >=
+    install_requires=['pycryptodome'], # TODO add version >=
     license="new-style BSD",
     zip_safe=False,
     keywords='SJCL, AES, encryption, pycrypto, Javascript',
