@@ -110,8 +110,8 @@ class SJCL(object):
             raise Exception("salt should be %d bytes long" % self.salt_size)
 
         dkLen = data["ks"]//8
-        if dkLen != 16:
-            raise Exception("key length should be 16 bytes")
+        if dkLen != 16 and dkLen != 32:
+            raise Exception("key length should be 16 bytes or 32 bytes")
 
         key = PBKDF2(
             passphrase,
