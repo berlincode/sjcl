@@ -102,7 +102,10 @@ class SJCL(object):
 
         if data["ts"] != self.tag_size * 8:
             raise Exception("desired tag length != %d" % (self.tag_size * 8))
-
+        # Fix padding
+        if len(data["salt"]) % 4:
+        # not a multiple of 4, add padding:
+            data["salt"] += '=' * (4 - len(data["salt"]) % 4)
         salt = base64.b64decode(data["salt"])
 
     #    print "salt", hex_string(salt)
@@ -120,7 +123,14 @@ class SJCL(object):
             dkLen=dkLen,
             prf=self.prf
         )
-#        print "key", hex_string(key)
+#       print "key", hex_string(key)
+        # Fix padding
+        if len(data["iv"]) % 4:
+        # not a multiple of 4, add padding:
+            data["iv"] += '=' * (4 - len(data["iv"]) % 4)
+        if len(data["ct"]) % 4:
+        # not a multiple of 4, add padding:
+            data["ct"] += '=' * (4 - len(data["ct"]) % 4)
 
         ciphertext = base64.b64decode(data["ct"])
         iv = base64.b64decode(data["iv"])
