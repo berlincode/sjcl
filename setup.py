@@ -21,13 +21,7 @@ HISTORY = open('CHANGES.txt').read().replace('.. :changelog:', '')
 setup(
     name='sjcl',
     version='0.1.6',
-    description="""
-Decrypt and encrypt messages compatible to the "Stanford Javascript Crypto
-Library (SJCL)" message format.
-
-This module was created while programming and testing the encrypted
-blog platform on cryptedblog.com which is based on sjcl.
-""",
+    description="Decrypt and encrypt messages compatible to the 'Stanford Javascript Crypto Library (SJCL)' message format.",
     long_description=README + '\n\n' + HISTORY,
     author='Ulf Bartel',
     author_email='elastic.code@gmail.com',
