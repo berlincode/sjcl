@@ -20,7 +20,7 @@ HISTORY = open('CHANGES.txt').read().replace('.. :changelog:', '')
 
 setup(
     name='sjcl',
-    version='0.1.5',
+    version='0.1.6',
     description="""
 Decrypt and encrypt messages compatible to the "Stanford Javascript Crypto
 Library (SJCL)" message format.
@@ -37,7 +37,7 @@ blog platform on cryptedblog.com which is based on sjcl.
     ],
     package_dir={'sjcl': 'sjcl'},
     include_package_data=True,
-    install_requires=['pycryptodome'], # TODO add version >=
+    install_requires=['pycryptodome'],
     license="new-style BSD",
     zip_safe=False,
     keywords='SJCL, AES, encryption, pycrypto, Javascript',

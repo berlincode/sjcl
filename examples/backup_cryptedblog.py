@@ -12,10 +12,11 @@ This module may also be used as a backup solution for cryptedblog.
 """
 
 import os
-import requests
 import json
-from sjcl import SJCL
 import base64
+
+import requests
+from sjcl import SJCL
 
 URL_API = '%(server)s/api/blog/v1.0'
 URL_POST = URL_API + '/blog/%(blog)s/posts?offset=%(offset)d&limit=%(limit)d'
@@ -39,7 +40,7 @@ def write_file(fname_parts, content):
     fhandle.close()
 
 
-class Cryptedblog():
+class Cryptedblog(object):
     """ This module downloads all content of a blog from www.cyptedblog.com via the
     JSON api, decrypts the SJCL encrpted posts/comments/images and saves both, the
     encrypted and decrypted data to disk.

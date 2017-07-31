@@ -7,21 +7,14 @@ Library (SJCL)" message format.
 
 This module was created while programming and testing the encrypted
 blog platform on cryptedblog.com which is based on sjcl.
-
-You need the pycrypto library with ccm support. As of 2014-05 you need a
-special branch of pycrypto or a version >= 2.7a1.
-
-See https://github.com/Legrandin/pycrypto .
-
-You may use git to clone the ccm branch:
-git clone -b ccm git://github.com/Legrandin/pycrypto.git .
 """
+
+import base64
 
 from Crypto.Hash import SHA256, HMAC
 from Crypto.Protocol.KDF import PBKDF2
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
-import base64
 
 # field explanation from Jay Tuley (jbtule)
 # - see http://stackoverflow.com/a/13570154
@@ -72,8 +65,8 @@ def check_mode_ccm():
         AES.MODE_CCM
     except:
         raise Exception(
-            "Pycrypto does not seem to support MODE_CCM. " +
-            "You need a version >= 2.7a1 (or a special branch)."
+            "Pycrypto/pycryptodome does not seem to support MODE_CCM. " +
+            "If you use pycrypto, you need a version >= 2.7a1 (or a special branch)."
         )
 
 

@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from sjcl import SJCL
 import unittest
 
+from sjcl import SJCL
 
 class Test(unittest.TestCase):
 
