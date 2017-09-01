@@ -23,7 +23,7 @@ Typical usage may look like this:
 Public repository
 -----------------
 
-https://github.com/berlincode/sjcl
+[https://github.com/berlincode/sjcl](https://github.com/berlincode/sjcl)
 
 
 License
