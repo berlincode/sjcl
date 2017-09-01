@@ -1,6 +1,10 @@
 Python-SJCL
 ===========
 
+[![Travis CI](https://travis-ci.org/berlincode/sjcl.svg?branch=master&style=flat)](https://travis-ci.org/berlincode/sjcl)
+[![Python versions](https://img.shields.io/pypi/pyversions/sjcl.svg)](https://pypi.python.org/pypi/sjcl/)
+[![new-style BSD](https://img.shields.io/pypi/l/sjcl.svg)](https://github.com/berlincode/sjcl/blob/master/LICENSE.txt)
+
 Decrypt and encrypt messages compatible to the "Stanford Javascript Crypto
 Library (SJCL)" message format. This is a wrapper around pycrypto.
 

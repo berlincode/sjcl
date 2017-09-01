@@ -1,5 +1,6 @@
 *.py[cod]
 README.rst
+README.html
 Crypto
 
 # C extensions

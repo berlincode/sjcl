@@ -11,7 +11,7 @@ except ImportError:
     from distutils.core import setup
 
 if sys.argv[-1] == 'publish':
-    os.system('pandoc -o README.rst README.md')
+    os.system('pandoc --from=markdown --to=rst -o README.rst README.md')
     os.system('python setup.py sdist upload')
     sys.exit()
 
