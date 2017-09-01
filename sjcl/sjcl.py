@@ -95,7 +95,10 @@ class SJCL(object):
 
         if data["ts"] != self.tag_size * 8:
             raise Exception("desired tag length != %d" % (self.tag_size * 8))
-
+        # Fix padding
+        if len(data["salt"]) % 4:
+        # not a multiple of 4, add padding:
+            data["salt"] += '=' * (4 - len(data["salt"]) % 4)
         salt = base64.b64decode(data["salt"])
 
     #    print "salt", hex_string(salt)
@@ -103,8 +106,8 @@ class SJCL(object):
             raise Exception("salt should be %d bytes long" % self.salt_size)
 
         dkLen = data["ks"]//8
-        if dkLen != 16:
-            raise Exception("key length should be 16 bytes")
+        if dkLen != 16 and dkLen != 32:
+            raise Exception("key length should be 16 bytes or 32 bytes")
 
         key = PBKDF2(
             passphrase,
@@ -113,7 +116,14 @@ class SJCL(object):
             dkLen=dkLen,
             prf=self.prf
         )
-#        print "key", hex_string(key)
+#       print "key", hex_string(key)
+        # Fix padding
+        if len(data["iv"]) % 4:
+        # not a multiple of 4, add padding:
+            data["iv"] += '=' * (4 - len(data["iv"]) % 4)
+        if len(data["ct"]) % 4:
+        # not a multiple of 4, add padding:
+            data["ct"] += '=' * (4 - len(data["ct"]) % 4)
 
         ciphertext = base64.b64decode(data["ct"])
         iv = base64.b64decode(data["iv"])
