@@ -47,22 +47,21 @@ class Test(unittest.TestCase):
 
     def test_gcm_decrypt(self):
         cyphertext = {
-            'adata': '',
-            'cipher': 'aes',
-            'ct': b's/Q6URMtL+LBqip18cUfjn4jRFiFL5rQrggT6kGa0k1EfoHA+cUd+U8=',
-            'iter': 1000,
-            'iv': b'5tZLwZkP793mZkqnilerZA==',
-            'ks': 128,
-            'mode': 'gcm',
-            'salt': b'pG6mSsQI3o0=',
-            'ts': 128,
-            'v': 1
+            "iv": "oi51KdYi8av0PysYeCDDiw==",
+            "v":1,
+            "iter":10000,
+            "ks":256,
+            "ts":128,
+            "mode":"gcm",
+            "adata":"",
+            "cipher":"aes",
+            "salt": "C4DRJM5AH+A=",
+            "ct": "KIINDGEQO63pY2mFIWpOuWgx2RAnfU0rhKU="
         }
         self.assertEqual(
-            SJCL().decrypt(cyphertext, "shared_secret"),
-            b"secret message to encrypt"
+            SJCL().decrypt(cyphertext, "vYHOPyQ7Q6NOfm6zkT44IE2SVv+52arqCOv7cDfMApI="),
+            b"test paste"
         )
-
 
 if __name__ == '__main__':
     unittest.main()

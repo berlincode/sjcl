@@ -98,9 +98,10 @@ class SJCL(object):
             raise Exception("only version 1 is currently supported")
 
         # Fix padding
-        if len(data["salt"]) % 4:
-        # not a multiple of 4, add padding:
-            data["salt"] += '=' * (4 - len(data["salt"]) % 4)
+        if aes_mode == AES.MODE_CCM:
+            # not a multiple of 4, add padding:
+            if len(data["salt"]) % 4:
+                data["salt"] += '=' * (4 - len(data["salt"]) % 4)
         salt = base64.b64decode(data["salt"])
 
     #    print "salt", hex_string(salt)
@@ -119,19 +120,23 @@ class SJCL(object):
             prf=self.prf
         )
 #       print "key", hex_string(key)
-        # Fix padding
-        if len(data["iv"]) % 4:
-        # not a multiple of 4, add padding:
-            data["iv"] += '=' * (4 - len(data["iv"]) % 4)
-        if len(data["ct"]) % 4:
-        # not a multiple of 4, add padding:
-            data["ct"] += '=' * (4 - len(data["ct"]) % 4)
+        if aes_mode == AES.MODE_CCM:
+            # Fix padding
+            if len(data["iv"]) % 4:
+            # not a multiple of 4, add padding:
+                data["iv"] += '=' * (4 - len(data["iv"]) % 4)
+            if len(data["ct"]) % 4:
+            # not a multiple of 4, add padding:
+                data["ct"] += '=' * (4 - len(data["ct"]) % 4)
 
         ciphertext = base64.b64decode(data["ct"])
         iv = base64.b64decode(data["iv"])
 #        print AES.block_size
 
-        nonce = truncate_iv(iv, len(ciphertext)*8, data["ts"])
+        if aes_mode == AES.MODE_CCM:
+            nonce = truncate_iv(iv, len(ciphertext)*8, data["ts"])
+        else:
+            nonce = iv
 
         # split tag from ciphertext (tag was simply appended to ciphertext)
         mac = ciphertext[-(data["ts"]//8):]
@@ -148,7 +153,7 @@ class SJCL(object):
 
         return plaintext
 
-    def encrypt(self, plaintext, passphrase, mode="ccm", count=1000, dkLen=16):
+    def encrypt(self, plaintext, passphrase, mode="ccm", count=10000, dkLen=16):
         # dkLen = key length in bytes
         aes_mode = get_aes_mode(mode)
         tlen = DEFAULT_TLEN[aes_mode]
@@ -159,7 +164,10 @@ class SJCL(object):
         key = PBKDF2(passphrase, salt, count=count, dkLen=dkLen, prf=self.prf)
 
         # TODO plaintext padding?
-        nonce = truncate_iv(iv, len(plaintext) * 8, tlen)
+        if aes_mode == AES.MODE_CCM:
+            nonce = truncate_iv(iv, len(plaintext) * 8, tlen)
+        else:
+            nonce = iv
     #    print len(nonce)
 
         cipher = AES.new(
