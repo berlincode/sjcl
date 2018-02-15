@@ -16,6 +16,12 @@ from Crypto.Protocol.KDF import PBKDF2
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
 
+# Default tag length for differend AES modes
+DEFAULT_TLEN = {
+    AES.MODE_CCM: 64,
+    AES.MODE_GCM: 128
+}
+
 # field explanation from Jay Tuley (jbtule)
 # - see http://stackoverflow.com/a/13570154
 #
@@ -59,33 +65,31 @@ def truncate_iv(iv, ol, tlen):  # ol and tlen in bits
     return iv[:(15-L)]
 
 
-def check_mode_ccm():
-    # checks if pycrypto has support for CCM
+def get_aes_mode(mode):
+    """Return pycrypto's AES mode, raise exception if not supported"""
+    aes_mode_attr = "MODE_{}".format(mode.upper())
     try:
-        AES.MODE_CCM
-    except:
+        aes_mode = getattr(AES, aes_mode_attr)
+    except AttributeError:
         raise Exception(
-            "Pycrypto/pycryptodome does not seem to support MODE_CCM. " +
+            "Pycrypto/pycryptodome does not seem to support {}. ".format(aes_mode_attr) +
             "If you use pycrypto, you need a version >= 2.7a1 (or a special branch)."
         )
+    return aes_mode
 
 
 class SJCL(object):
 
     def __init__(self):
         self.salt_size = 8  # bytes
-        self.tag_size = 8  # bytes
-        self.mac_size = 8  # bytes; mac = message authentication code (MAC)
         self.prf = lambda p, s: HMAC.new(p, s, SHA256).digest()
 
     def decrypt(self, data, passphrase):
-        check_mode_ccm()  # check ccm support
-
         if data["cipher"] != "aes":
             raise Exception("only aes cipher supported")
 
-        if data["mode"] != "ccm":
-            raise Exception("unknown mode(!=ccm)")
+        aes_mode = get_aes_mode(data["mode"])
+        tlen = data["ts"]
 
         if data["adata"] != "":
             raise Exception("additional authentication data not equal ''")
@@ -93,8 +97,6 @@ class SJCL(object):
         if data["v"] != 1:
             raise Exception("only version 1 is currently supported")
 
-        if data["ts"] != self.tag_size * 8:
-            raise Exception("desired tag length != %d" % (self.tag_size * 8))
         # Fix padding
         if len(data["salt"]) % 4:
         # not a multiple of 4, add padding:
@@ -139,17 +141,17 @@ class SJCL(object):
 #        print len(tag)
 
 #        print "len", len(nonce)
-        cipher = AES.new(key, AES.MODE_CCM, nonce, mac_len=self.mac_size)
+        cipher = AES.new(key, aes_mode, nonce, mac_len=tlen // 8)
         plaintext = cipher.decrypt(ciphertext)
 
         cipher.verify(mac)
 
         return plaintext
 
-    def encrypt(self, plaintext, passphrase, count=1000, dkLen=16):
+    def encrypt(self, plaintext, passphrase, mode="ccm", count=1000, dkLen=16):
         # dkLen = key length in bytes
-
-        check_mode_ccm()  # check ccm support
+        aes_mode = get_aes_mode(mode)
+        tlen = DEFAULT_TLEN[aes_mode]
 
         salt = get_random_bytes(self.salt_size)
         iv = get_random_bytes(16)  # TODO dkLen?
@@ -157,14 +159,14 @@ class SJCL(object):
         key = PBKDF2(passphrase, salt, count=count, dkLen=dkLen, prf=self.prf)
 
         # TODO plaintext padding?
-        nonce = truncate_iv(iv, len(plaintext) * 8, self.tag_size * 8)
+        nonce = truncate_iv(iv, len(plaintext) * 8, tlen)
     #    print len(nonce)
 
         cipher = AES.new(
             key,
-            AES.MODE_CCM,
+            aes_mode,
             nonce,
-            mac_len=self.mac_size
+            mac_len=tlen // 8
         )
 
         ciphertext = cipher.encrypt(plaintext)
@@ -179,8 +181,8 @@ class SJCL(object):
             "ct": base64.b64encode(ciphertext),
             "iv": base64.b64encode(iv),
             "cipher": "aes",
-            "mode": "ccm",
+            "mode": mode,
             "adata": "",
             "v": 1,
-            "ts": self.tag_size * 8
+            "ts": tlen
             }

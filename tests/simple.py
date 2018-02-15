@@ -36,5 +36,33 @@ class Test(unittest.TestCase):
             b"secret message to encrypt"
         )
 
+    def test_gcm_mode_encrypt_decrypt(self):
+        message = b"secret message to encrypt"
+        cyphertext = SJCL().encrypt(message, "shared_secret", mode="gcm")
+
+        self.assertEqual(
+            SJCL().decrypt(cyphertext, "shared_secret"),
+            message
+        )
+
+    def test_gcm_decrypt(self):
+        cyphertext = {
+            'adata': '',
+            'cipher': 'aes',
+            'ct': b's/Q6URMtL+LBqip18cUfjn4jRFiFL5rQrggT6kGa0k1EfoHA+cUd+U8=',
+            'iter': 1000,
+            'iv': b'5tZLwZkP793mZkqnilerZA==',
+            'ks': 128,
+            'mode': 'gcm',
+            'salt': b'pG6mSsQI3o0=',
+            'ts': 128,
+            'v': 1
+        }
+        self.assertEqual(
+            SJCL().decrypt(cyphertext, "shared_secret"),
+            b"secret message to encrypt"
+        )
+
+
 if __name__ == '__main__':
     unittest.main()
