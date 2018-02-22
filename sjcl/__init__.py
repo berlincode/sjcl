@@ -4,6 +4,6 @@
 from .sjcl import SJCL
 
 __author__ = "Ulf Bartel <elastic.code@gmail.com>"
-__version__ = "0.1.7"
+__version__ = "0.2.0"
 __copyright__ = "Copyright (c) Ulf Bartel"
 __license__ = "New-style BSD"

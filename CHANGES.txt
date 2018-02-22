@@ -2,3 +2,4 @@ v0.1.1, 2014-05-21 -- Initial public release.
 v0.1.4, 2016-04-17 -- Re-init of repository after homepage changed.
 v0.1.5, 2016-07-12 -- Python3 compat
 v0.1.6, 2017-07-31 -- Now dependent on pycryptodome
+v0.2.0, 2018-02-22 -- AES-GCM mode support 
