@@ -20,7 +20,7 @@ HISTORY = open('CHANGES.txt').read().replace('.. :changelog:', '')
 
 setup(
     name='sjcl',
-    version='0.2.0',
+    version='0.2.1',
     description="Decrypt and encrypt messages compatible to the 'Stanford Javascript Crypto Library (SJCL)' message format.",
     long_description=README + '\n\n' + HISTORY,
     author='Ulf Bartel',

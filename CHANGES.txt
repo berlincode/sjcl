@@ -3,3 +3,4 @@ v0.1.4, 2016-04-17 -- Re-init of repository after homepage changed.
 v0.1.5, 2016-07-12 -- Python3 compat
 v0.1.6, 2017-07-31 -- Now dependent on pycryptodome
 v0.2.0, 2018-02-22 -- AES-GCM mode support 
+v0.2.1, 2018-08-16 -- Fixed README.md (missing 'b' prefix for use with python3)

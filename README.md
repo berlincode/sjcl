@@ -18,7 +18,7 @@ Typical usage may look like this:
 
     from sjcl import SJCL
 
-    cyphertext = SJCL().encrypt("secret message to encrypt", "shared_secret")
+    cyphertext = SJCL().encrypt(b"secret message to encrypt", "shared_secret")
 
     print cyphertext
     print SJCL().decrypt(cyphertext, "shared_secret")
